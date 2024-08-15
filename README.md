@@ -1,3 +1,12 @@
+Order
+Config-Server -> Auth-Server <-> Gateway <-> Filter-Service <-> Analytics-Service <-> Post-Service
+
+Databases
+Auth-Server - MiniposterAuthDatabase
+Analytics-Service - MiniposterAnalyticsDatabase
+Filter-Service - MiniposterFiltersDatabase
+Post-Serivce - MiniposterPostsDatabase
+
 Auth API\
 localhost:8000/api/auth/register - Register a new user via a JSON body(Keys: "username", "email", "password"), returns a JWT token\
 localhost:8000/api/auth/login - Login using a username or an email via a JSON body(Keys: "username", "password"), returns a JWT token\
