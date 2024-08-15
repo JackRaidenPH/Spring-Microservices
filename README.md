@@ -1,10 +1,10 @@
-Order
+Order\
 Config-Server -> Auth-Server <-> Gateway <-> Filter-Service <-> Analytics-Service <-> Post-Service
 
-Databases
-Auth-Server - MiniposterAuthDatabase
-Analytics-Service - MiniposterAnalyticsDatabase
-Filter-Service - MiniposterFiltersDatabase
+Databases\
+Auth-Server - MiniposterAuthDatabase\
+Analytics-Service - MiniposterAnalyticsDatabase\
+Filter-Service - MiniposterFiltersDatabase\
 Post-Serivce - MiniposterPostsDatabase
 
 Auth API\
