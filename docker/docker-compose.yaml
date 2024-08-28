@@ -1,0 +1,147 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:latest
+    hostname: postgres
+    container_name: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: miniposterdb
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - app-network
+    ports:
+      - "5432:5432"
+
+  rabbitmq:
+    image: rabbitmq:latest
+    hostname: rabbitmq
+    container_name: rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    networks:
+      - app-network
+
+  config-server:
+    image: config-server:0.0.1-SNAPSHOT
+    hostname: config-server
+    container_name: config-server
+    pull_policy: never 
+    environment:
+      CLOUD_CONFIG_GIT_URI: https://github.com/JackRaidenPH/spring-boot-configs.git
+      CLOUD_CONFIG_GIT_PASSWORD:
+    depends_on:
+      - postgres
+      - rabbitmq
+    networks:
+      - app-network
+    ports:
+      - "7999:7999"
+    healthcheck:
+      test: sleep 3s
+      interval: 4s
+      retries: 1
+      timeout: 5s
+
+  auth-server:
+    image: auth-server:0.0.1-SNAPSHOT
+    hostname: auth-server
+    container_name: auth-server
+    pull_policy: never 
+    volumes:
+      - auth-server:/var/lib/auth-server
+    environment:
+      KEYS_PATH: /var/lib/auth-server
+      CLOUD_CONFIG_SERVER_URI: http://config-server:7999
+      DATABASE_URI: postgres:5432
+      DATABASE_NAME: miniposterdb
+    depends_on:
+      config-server:
+        condition: service_healthy
+    networks:
+      - app-network
+    ports:
+      - "8001:8001"
+    user: root
+
+  gateway:
+    image: gateway:0.0.1-SNAPSHOT
+    hostname: gateway
+    container_name: gateway
+    pull_policy: never 
+    environment:
+        CLOUD_CONFIG_SERVER_URI: http://config-server:7999
+        AUTH_SERVER_URI: http://auth-server:8001
+        POST_SERVICE_URL: http://auth-server:8003
+        ANALYTICS_SERVICE_URL: http://auth-server:8002
+        FILTER_SERVICE_URL: http://auth-server:8004
+    depends_on:
+      - auth-server
+    networks:
+      - app-network
+    ports:
+      - "8000:8000"
+
+  post-service:
+    image: post-service:0.0.1-SNAPSHOT
+    hostname: post-service
+    container_name: post-service
+    environment:
+      CLOUD_CONFIG_SERVER_URI: http://config-server:7999
+      DATABASE_URI: postgres:5432
+      DATABASE_NAME: miniposterdb
+      RABBITMQ_HOSTNAME: rabbitmq
+      FILTER_SERVICE_URI: http://filter-service:8004
+      MAX_POST_LENGTH: 250
+    pull_policy: never 
+    depends_on:
+      - gateway
+    networks:
+      - app-network
+    ports:
+      - "8002:8002"
+
+  filter-service:
+    image: filter-service:0.0.1-SNAPSHOT
+    hostname: filter-service
+    container_name: filter-service
+    pull_policy: never 
+    environment:
+      CLOUD_CONFIG_SERVER_URI: http://config-server:7999
+      DATABASE_URI: postgres:5432
+      DATABASE_NAME: miniposterdb
+    depends_on:
+      - post-service
+    networks:
+      - app-network
+    ports:
+      - "8004:8004"
+
+  analytics-service:
+    image: analytics-service:0.0.1-SNAPSHOT
+    hostname: analytics-service
+    container_name: analytics-service
+    pull_policy: never 
+    environment:
+      CLOUD_CONFIG_SERVER_URI: http://config-server:7999
+      DATABASE_URI: postgres:5432
+      DATABASE_NAME: miniposterdb
+      RABBITMQ_HOSTNAME: rabbitmq
+    depends_on:
+      - post-service
+    networks:
+      - app-network
+    ports:
+      - "8003:8003"
+
+volumes:
+  postgres_data:
+  auth-server:
+
+networks:
+  app-network:
+    driver: bridge
