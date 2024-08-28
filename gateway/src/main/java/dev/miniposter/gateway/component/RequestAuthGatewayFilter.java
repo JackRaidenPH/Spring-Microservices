@@ -6,6 +6,7 @@ import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpResponse;
@@ -21,6 +22,9 @@ import java.security.PublicKey;
 @Component
 @Log
 public class RequestAuthGatewayFilter implements GatewayFilter, WebFilter {
+
+    @Autowired
+    private Environment env;
 
     @Autowired
     private ValidationService validationService;
@@ -49,7 +53,7 @@ public class RequestAuthGatewayFilter implements GatewayFilter, WebFilter {
         }
 
         return WebClient.builder()
-                .baseUrl("http://localhost:8001")
+                .baseUrl(env.getProperty("redirect.auth-server-url"))
                 .build()
                 .get()
                 .uri("/public/rsa")

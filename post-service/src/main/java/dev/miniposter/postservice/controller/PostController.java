@@ -19,7 +19,7 @@ public class PostController {
     @Autowired
     private PostRepository postRepository;
 
-    @GetMapping("/posts")
+    @GetMapping("/posts/all")
     public ResponseEntity<List<PostDTO>> getPosts() {
         try {
             List<PostDTO> posts = this.postRepository.findAll().stream()

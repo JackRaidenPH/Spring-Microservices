@@ -76,9 +76,10 @@ services:
     environment:
         CLOUD_CONFIG_SERVER_URI: http://config-server:7999
         AUTH_SERVER_URI: http://auth-server:8001
-        POST_SERVICE_URL: http://auth-server:8003
-        ANALYTICS_SERVICE_URL: http://auth-server:8002
-        FILTER_SERVICE_URL: http://auth-server:8004
+        POST_SERVICE_URL: http://post-service:8002
+        ANALYTICS_SERVICE_URL: http://analytics-service:8003
+        FILTER_SERVICE_URL: http://filter-service:8004
+        RABBITMQ_HOSTNAME: rabbitmq
     depends_on:
       - auth-server
     networks:
