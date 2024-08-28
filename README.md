@@ -1,3 +1,7 @@
+!!!
+docker folder contains docker-compose.yaml for launching the whole system, as well as built images for each service. Images are large, so it might be better to build them yourself in order to save traffic.
+!!!
+
 Order\
 Config-Server -> Auth-Server <-> Gateway <-> Filter-Service <-> Analytics-Service <-> Post-Service
 
