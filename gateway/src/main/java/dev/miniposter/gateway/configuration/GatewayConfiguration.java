@@ -6,12 +6,16 @@ import org.springframework.cloud.gateway.route.RouteLocator;
 import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;;
 
 @Configuration
 public class GatewayConfiguration {
 
     @Autowired
     RequestAuthGatewayFilter requestAuthGatewayFilter;
+
+    @Autowired
+    private Environment env;
 
     @Bean
     public RouteLocator routes(RouteLocatorBuilder builder) {
@@ -22,7 +26,8 @@ public class GatewayConfiguration {
                                 .filters(f -> f
                                         .rewritePath("/api/auth/(?<segment>.*)", "/auth/${segment}")
                                 )
-                                .uri("http://localhost:8001")
+                                .uri(env.getProperty("redirect.auth-server-url"))
+                                //.uri("http://localhost:8001")
                 )
                 .route("analytics-service",
                         r -> r
@@ -30,8 +35,8 @@ public class GatewayConfiguration {
                                 .filters(f -> f
                                         .rewritePath("/api/analytics/(?<segment>.*)", "/analytics/${segment}")
                                 )
-                                .uri("http://localhost:8003")
-
+                                .uri(env.getProperty("redirect.analytics-service-url"))
+                                //.uri("http://localhost:8003")
                 )
                 .route("post-service",
                         r -> r
@@ -39,8 +44,8 @@ public class GatewayConfiguration {
                                 .filters(f -> f
                                         .rewritePath("/api/posts/(?<segment>.*)", "/posts/${segment}")
                                 )
-                                .uri("http://localhost:8002")
-
+                                .uri(env.getProperty("redirect.post-service-url"))
+                                //.uri("http://localhost:8002")
                 )
                 .route("filter-service",
                         r -> r
@@ -48,7 +53,8 @@ public class GatewayConfiguration {
                                 .filters(f -> f
                                         .rewritePath("/api/filter/(?<segment>.*)", "/${segment}")
                                 )
-                                .uri("http://localhost:8004")
+                                .uri(env.getProperty("redirect.filter-service-url"))
+                                //.uri("http://localhost:8004")
                 )
                 .build();
     }
