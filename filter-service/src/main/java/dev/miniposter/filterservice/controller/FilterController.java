@@ -29,7 +29,7 @@ public class FilterController {
     }
 
     @GetMapping("/is_bad")
-    public ResponseEntity<Boolean> isBad(@RequestParam String word) {
+    public ResponseEntity<Boolean> isWordBad(@RequestParam String word) {
         try {
             boolean result = false;
             if (word != null) {
@@ -42,7 +42,7 @@ public class FilterController {
     }
 
     @GetMapping("/bad_words")
-    public ResponseEntity<List<String>> badWordsList() {
+    public ResponseEntity<List<String>> getAllBadWords() {
         try {
             List<String> badWords = this.filterService.getAllFilters().stream()
                     .map(Filter::getFilter)

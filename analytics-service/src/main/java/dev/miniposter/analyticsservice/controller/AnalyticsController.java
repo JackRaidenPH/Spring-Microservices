@@ -31,7 +31,7 @@ public class AnalyticsController {
     private final AnalyticsService analyticsService;
 
     @GetMapping("/record/{id}")
-    ResponseEntity<AnalyticsRecordDTO> recordDetails(@PathVariable("id") long recordId) {
+    ResponseEntity<AnalyticsRecordDTO> getRecordDetails(@PathVariable("id") long recordId) {
         try {
             Optional<AnalyticsRecord> record = this.analyticsService.findById(recordId);
             return record
@@ -43,7 +43,7 @@ public class AnalyticsController {
     }
 
     @GetMapping("/user/{id}")
-    ResponseEntity<UserStatisticsSummaryDTO> userStatistics(@PathVariable("id") long userId) {
+    ResponseEntity<UserStatisticsSummaryDTO> getUserStatistics(@PathVariable("id") long userId) {
         try {
             List<AnalyticsRecord> records = this.analyticsService.findAllByAuthorId(userId);
             Pair<Long, Long> approvedRejected = this.analyticsService.calculateApprovedRejected(records);
@@ -57,7 +57,7 @@ public class AnalyticsController {
     }
 
     @GetMapping("/summary")
-    ResponseEntity<StatisticsSummaryDTO> statistics() {
+    ResponseEntity<StatisticsSummaryDTO> getSummary() {
         try {
             List<AnalyticsRecord> records = this.analyticsService.findAll();
             Pair<Long, Long> approvedRejected = this.analyticsService.calculateApprovedRejected(records);
@@ -72,7 +72,7 @@ public class AnalyticsController {
     }
 
     @GetMapping("/bad_words_summary")
-    ResponseEntity<BadWordsSummaryDTO> allBadWords() {
+    ResponseEntity<BadWordsSummaryDTO> getBadWordsSummary() {
         try {
             Map<String, Long> stats = this.analyticsService.countBadWordsUsages();
             return ResponseEntity.ok(new BadWordsSummaryDTO(stats));
