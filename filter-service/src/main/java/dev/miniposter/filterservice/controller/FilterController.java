@@ -3,6 +3,7 @@ package dev.miniposter.filterservice.controller;
 
 import dev.miniposter.filterservice.model.Filter;
 import dev.miniposter.filterservice.repository.FilterRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,10 +18,10 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @RestController
+@RequiredArgsConstructor
 public class FilterController {
 
-    @Autowired
-    private FilterRepository filterRepository;
+    private final FilterRepository filterRepository;
 
     @GetMapping("/check_text")
     public ResponseEntity<List<String>> getPosts(@RequestBody String text) {

@@ -4,6 +4,7 @@ import dev.miniposter.postservice.dto.PostDTO;
 import dev.miniposter.postservice.model.Post;
 import dev.miniposter.postservice.repository.PostRepository;
 import dev.miniposter.postservice.service.PostMapper;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,10 +15,10 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
+@RequiredArgsConstructor
 public class PostController {
 
-    @Autowired
-    private PostRepository postRepository;
+    private final PostRepository postRepository;
 
     @GetMapping("/posts/all")
     public ResponseEntity<List<PostDTO>> getPosts() {

@@ -6,6 +6,7 @@ import dev.miniposter.authserver.dto.SignInRequest;
 import dev.miniposter.authserver.model.User;
 import dev.miniposter.authserver.service.AuthService;
 import dev.miniposter.authserver.service.UserService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,13 +18,13 @@ import java.util.logging.Level;
 
 //Lombok
 @Log
+@RequiredArgsConstructor
 //Spring
 @RestController
 @RequestMapping("/auth")
 public class UserController {
 
-    @Autowired
-    private AuthService authService;
+    private final AuthService authService;
 
     @PostMapping("/register")
     private ResponseEntity<SignInJWTResponse> register(@RequestBody RegisterRequest request) {

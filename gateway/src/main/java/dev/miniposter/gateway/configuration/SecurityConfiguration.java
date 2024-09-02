@@ -1,6 +1,7 @@
 package dev.miniposter.gateway.configuration;
 
 import dev.miniposter.gateway.component.RequestAuthGatewayFilter;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,10 +16,10 @@ import org.springframework.security.web.server.util.matcher.PathPatternParserSer
 
 @Configuration
 @EnableWebFluxSecurity
+@RequiredArgsConstructor
 public class SecurityConfiguration {
 
-    @Autowired
-    RequestAuthGatewayFilter requestAuthGatewayFilter;
+    private final RequestAuthGatewayFilter requestAuthGatewayFilter;
 
     @Bean
     public SecurityWebFilterChain filterChain(ServerHttpSecurity http) {

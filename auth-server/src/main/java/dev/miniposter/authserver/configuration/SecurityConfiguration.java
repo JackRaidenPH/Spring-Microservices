@@ -1,6 +1,7 @@
 package dev.miniposter.authserver.configuration;
 
 import dev.miniposter.authserver.service.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,10 +24,10 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfiguration {
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
 
     @Bean
     public PasswordEncoder passwordEncoder() {

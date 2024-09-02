@@ -2,6 +2,7 @@ package dev.miniposter.authserver.service;
 
 import dev.miniposter.authserver.model.User;
 import dev.miniposter.authserver.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,10 +14,10 @@ import java.util.logging.Level;
 
 @Service
 @Log
+@RequiredArgsConstructor
 public class UserService implements UserDetailsService {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     public void create(User user) {
         if (userRepository.existsByUsername(user.getUsername())) {

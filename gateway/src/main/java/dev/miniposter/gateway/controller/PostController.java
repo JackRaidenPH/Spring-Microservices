@@ -2,6 +2,7 @@ package dev.miniposter.gateway.controller;
 
 import dev.miniposter.gateway.configuration.RabbitMQConfiguration;
 import dev.miniposter.gateway.dto.PostDTO;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,16 +17,11 @@ import org.springframework.web.server.ResponseStatusException;
 @RestController
 @RequestMapping("/api/post")
 @Log
+@RequiredArgsConstructor
 public class PostController {
 
-    @Autowired
-    private RabbitMQConfiguration rabbitMQConfiguration;
-
+    private final RabbitMQConfiguration rabbitMQConfiguration;
     private final RabbitTemplate rabbitTemplate;
-
-    public PostController(RabbitTemplate rabbitTemplate) {
-        this.rabbitTemplate = rabbitTemplate;
-    }
 
     @PostMapping("/add")
     public ResponseEntity<Void> sendPost(@RequestBody PostDTO post) {

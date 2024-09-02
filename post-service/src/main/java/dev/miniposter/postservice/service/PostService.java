@@ -23,24 +23,25 @@ import java.util.List;
 @Service
 public class PostService {
 
-    @Autowired
-    private PostRepository postRepository;
+    private final PostRepository postRepository;
 
-    @Autowired
-    private RabbitMQService rabbitMQService;
+    private final RabbitMQService rabbitMQService;
 
     private final RestClient webClient;
-
 
     private final int maxLength;
 
     public PostService(
             @Value("${rest.checkBadWordsURL}") String filterUrl,
             @Value("${post.maxLength:200}") int maxLength,
-            RestClient.Builder webClientBuilder
+            RestClient.Builder webClientBuilder,
+            PostRepository postRepository,
+            RabbitMQService rabbitMQService
     ) {
         this.webClient = webClientBuilder.baseUrl(filterUrl).build();
         this.maxLength = maxLength;
+        this.postRepository = postRepository;
+        this.rabbitMQService = rabbitMQService;
     }
 
     public List<String> checkWords(String text) {

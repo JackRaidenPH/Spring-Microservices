@@ -18,16 +18,13 @@ import org.springframework.stereotype.Service;
 
 @Service
 @Log
+@RequiredArgsConstructor
 public class AuthService {
 
-    @Autowired
-    private UserService userService;
-    @Autowired
-    private JWTService jwtService;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-    @Autowired
-    private AuthenticationManager authenticationManager;
+    private final UserService userService;
+    private final JWTService jwtService;
+    private final PasswordEncoder passwordEncoder;
+    private final AuthenticationManager authenticationManager;
 
     public SignInJWTResponse signUp(RegisterRequest request) {
         User user = User.builder()

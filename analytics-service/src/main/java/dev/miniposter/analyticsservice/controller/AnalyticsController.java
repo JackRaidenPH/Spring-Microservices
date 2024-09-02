@@ -4,6 +4,7 @@ import dev.miniposter.analyticsservice.dto.AnalyticsRecordDTO;
 import dev.miniposter.analyticsservice.model.AnalyticsRecord;
 import dev.miniposter.analyticsservice.repository.AnalyticsRepository;
 import dev.miniposter.analyticsservice.service.AnalyticsRecordMapper;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.util.Pair;
@@ -19,10 +20,10 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/analytics")
 @Log
+@RequiredArgsConstructor
 public class AnalyticsController {
 
-    @Autowired
-    private AnalyticsRepository analyticsRepository;
+    private final AnalyticsRepository analyticsRepository;
 
     @GetMapping("/record/{id}")
     ResponseEntity<AnalyticsRecordDTO> recordDetails(@PathVariable("id") long recordId) {

@@ -2,6 +2,7 @@ package dev.miniposter.gateway.component;
 
 import dev.miniposter.gateway.service.ValidationService;
 import io.jsonwebtoken.Claims;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
@@ -21,13 +22,11 @@ import java.security.PublicKey;
 
 @Component
 @Log
+@RequiredArgsConstructor
 public class RequestAuthGatewayFilter implements GatewayFilter, WebFilter {
 
-    @Autowired
-    private Environment env;
-
-    @Autowired
-    private ValidationService validationService;
+    private final Environment env;
+    private final ValidationService validationService;
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {

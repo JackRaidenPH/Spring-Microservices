@@ -1,6 +1,7 @@
 package dev.miniposter.authserver.service;
 
 import io.jsonwebtoken.security.KeyPairBuilder;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,13 +15,12 @@ import java.security.spec.*;
 
 @Service
 @Log
+@RequiredArgsConstructor
 public class RSAService {
 
-    @Autowired
-    private KeyPairBuilder rsaKeyPairBuilder;
+    private final KeyPairBuilder rsaKeyPairBuilder;
 
-    @Autowired
-    private KeyFactory rsaKeyFactory;
+    private final KeyFactory rsaKeyFactory;
 
     @Value("${rsa.publicKeyLocation}")
     private String publicKeyLocation;

@@ -1,6 +1,7 @@
 package dev.miniposter.authserver.controller;
 
 import dev.miniposter.authserver.service.RSAService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,12 +15,12 @@ import java.security.PublicKey;
 import java.util.Base64;
 
 @Log
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/public")
 public class RSAPublicKeyController {
 
-    @Autowired
-    private RSAService rsaService;
+    private final RSAService rsaService;
 
     @GetMapping("/rsa")
     public ResponseEntity<String> getRSAPublicKey() {

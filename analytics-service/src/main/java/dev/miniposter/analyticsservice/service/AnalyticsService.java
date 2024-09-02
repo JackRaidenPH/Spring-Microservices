@@ -4,6 +4,7 @@ import dev.miniposter.analyticsservice.configuration.RabbitMQConfiguration;
 import dev.miniposter.analyticsservice.dto.AnalyticsRecordDTO;
 import dev.miniposter.analyticsservice.model.AnalyticsRecord;
 import dev.miniposter.analyticsservice.repository.AnalyticsRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,10 +12,10 @@ import org.springframework.stereotype.Service;
 
 @Log
 @Service
+@RequiredArgsConstructor
 public class AnalyticsService {
 
-    @Autowired
-    private AnalyticsRepository analyticsRepository;
+    private final AnalyticsRepository analyticsRepository;
 
     @RabbitListener(queues = "${rabbitmq.queue.analyticsQueue:addAnalyticsRecordQueue}")
     public void listen(AnalyticsRecordDTO message) {
