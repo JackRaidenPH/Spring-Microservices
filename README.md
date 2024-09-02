@@ -2,7 +2,15 @@ Order\
 Config-Server -> Auth-Server <-> Gateway <-> Filter-Service <-> Analytics-Service <-> Post-Service
 
 Launch\
+Config server uses curl to check reach to GitHub repository, so must be built with a Dockerfile\
+```docker build -t config-server-curl -f ConfigServerDockerfile .```\
+The rest are built using Gradle's ```bootBuildImage``` task
+Launch with 
+```
+cd .\docker\
 docker compose up
+```
+
 
 Auth API\
 localhost:8000/api/auth/register - Register a new user via a JSON body(Keys: "username", "email", "password"), returns a JWT token\
