@@ -26,22 +26,37 @@ public class UserController {
     @PostMapping("/register")
     private ResponseEntity<SignInJWTResponse> register(@RequestBody RegisterRequest request) {
         try {
+
+            if (request.username().isBlank() || request.password().isBlank() || request.email().isBlank()) {
+                return ResponseEntity.badRequest().build();
+            }
+
             SignInJWTResponse created = authService.signUp(request);
+
+            if (created.token().isBlank()) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            }
+
             return ResponseEntity.ok(created);
         } catch (RuntimeException e) {
-            log.log(Level.INFO, e.getLocalizedMessage());
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getLocalizedMessage(), e);
+            log.warning(e.getLocalizedMessage());
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getLocalizedMessage(), e);
         }
     }
 
     @PostMapping("/login")
     private ResponseEntity<SignInJWTResponse> login(@RequestBody SignInRequest request) {
         try {
+
+            if (request.username().isBlank() || request.password().isBlank()) {
+                return ResponseEntity.badRequest().build();
+            }
+
             SignInJWTResponse created = authService.signIn(request);
-            return created.token().isBlank() ? ResponseEntity.badRequest().build() : ResponseEntity.ok(created);
+            return created.token().isBlank() ? ResponseEntity.status(HttpStatus.UNAUTHORIZED).build() : ResponseEntity.ok(created);
         } catch (RuntimeException e) {
-            log.log(Level.INFO, e.getLocalizedMessage());
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getLocalizedMessage(), e);
+            log.warning(e.getLocalizedMessage());
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getLocalizedMessage(), e);
         }
     }
 }
