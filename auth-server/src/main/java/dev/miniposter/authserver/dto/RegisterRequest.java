@@ -1,5 +1,12 @@
 package dev.miniposter.authserver.dto;
 
-public record RegisterRequest(String username, String email, String password) {
+import jakarta.validation.constraints.Email;
+
+public record RegisterRequest(
+        String username,
+        @Email
+        String email,
+        String password
+) {
 
 }
