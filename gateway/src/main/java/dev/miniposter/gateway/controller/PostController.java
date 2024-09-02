@@ -25,7 +25,11 @@ public class PostController {
     @PostMapping("/add")
     public ResponseEntity<Void> sendPost(@RequestBody PostDTO post) {
         try {
-            rabbitTemplate.convertAndSend(this.rabbitMQConfiguration.postExchange().getName(), "post.add", post);
+            rabbitTemplate.convertAndSend(
+                    this.rabbitMQConfiguration.postExchange().getName(),
+                    this.rabbitMQConfiguration.postQueue().getName(),
+                    post
+            );
             return ResponseEntity.accepted().build();
         } catch (Exception e) {
             log.severe(e.getLocalizedMessage());

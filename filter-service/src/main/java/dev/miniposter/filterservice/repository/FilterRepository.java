@@ -9,6 +9,6 @@ import java.util.Optional;
 import java.util.Set;
 
 public interface FilterRepository extends JpaRepository<Filter, Long> {
-    List<Filter> findByFilterIn(Set<String> words);
+    Set<Filter> findByFilterIn(Set<String> words);
     Optional<Filter> findByFilter(String word);
 }

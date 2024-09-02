@@ -5,8 +5,8 @@ import dev.miniposter.analyticsservice.dto.BadWordsSummaryDTO;
 import dev.miniposter.analyticsservice.dto.StatisticsSummaryDTO;
 import dev.miniposter.analyticsservice.dto.UserStatisticsSummaryDTO;
 import dev.miniposter.analyticsservice.model.AnalyticsRecord;
-import dev.miniposter.analyticsservice.repository.AnalyticsRepository;
 import dev.miniposter.analyticsservice.service.AnalyticsRecordMapper;
+import dev.miniposter.analyticsservice.service.AnalyticsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import org.springframework.data.util.Pair;
@@ -28,12 +28,12 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class AnalyticsController {
 
-    private final AnalyticsRepository analyticsRepository;
+    private final AnalyticsService analyticsService;
 
     @GetMapping("/record/{id}")
     ResponseEntity<AnalyticsRecordDTO> recordDetails(@PathVariable("id") long recordId) {
         try {
-            Optional<AnalyticsRecord> record = this.analyticsRepository.findById(recordId);
+            Optional<AnalyticsRecord> record = this.analyticsService.findById(recordId);
             return record
                     .map(analyticsRecord -> ResponseEntity.ok(AnalyticsRecordMapper.entityToDTO(analyticsRecord)))
                     .orElseGet(() -> ResponseEntity.notFound().build());
@@ -45,8 +45,8 @@ public class AnalyticsController {
     @GetMapping("/user/{id}")
     ResponseEntity<UserStatisticsSummaryDTO> userStatistics(@PathVariable("id") long userId) {
         try {
-            List<AnalyticsRecord> records = this.analyticsRepository.findAllByAuthorId(userId);
-            Pair<Long, Long> approvedRejected = this.calculateApprovedRejected(records);
+            List<AnalyticsRecord> records = this.analyticsService.findAllByAuthorId(userId);
+            Pair<Long, Long> approvedRejected = this.analyticsService.calculateApprovedRejected(records);
             return ResponseEntity.ok(new UserStatisticsSummaryDTO(
                     approvedRejected.getFirst(),
                     approvedRejected.getSecond()
@@ -59,8 +59,8 @@ public class AnalyticsController {
     @GetMapping("/summary")
     ResponseEntity<StatisticsSummaryDTO> statistics() {
         try {
-            List<AnalyticsRecord> records = this.analyticsRepository.findAll();
-            Pair<Long, Long> approvedRejected = this.calculateApprovedRejected(records);
+            List<AnalyticsRecord> records = this.analyticsService.findAll();
+            Pair<Long, Long> approvedRejected = this.analyticsService.calculateApprovedRejected(records);
             return ResponseEntity.ok(new StatisticsSummaryDTO(
                     records.size(),
                     approvedRejected.getFirst(),
@@ -71,16 +71,10 @@ public class AnalyticsController {
         }
     }
 
-    private Pair<Long, Long> calculateApprovedRejected(List<AnalyticsRecord> records) {
-        long approved = records.stream().filter(AnalyticsRecord::isAccepted).count();
-        long rejected = records.size() - approved;
-        return Pair.of(approved, rejected);
-    }
-
     @GetMapping("/bad_words_summary")
     ResponseEntity<BadWordsSummaryDTO> allBadWords() {
         try {
-            Map<String, Long> stats = this.analyticsRepository.countBadWords();
+            Map<String, Long> stats = this.analyticsService.countBadWordsUsages();
             return ResponseEntity.ok(new BadWordsSummaryDTO(stats));
         } catch (Exception e) {
             log.severe(e.getLocalizedMessage());

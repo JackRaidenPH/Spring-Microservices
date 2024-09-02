@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
 import java.util.List;
+import java.util.Optional;
 
 //Lombok
 @Log
@@ -110,6 +111,20 @@ public class PostService {
             log.warning(e.getLocalizedMessage());
             throw e;
         }
+    }
+
+    public List<PostDTO> getAllPostsDTO() {
+        return this.postRepository.findAll().stream().map(PostMapper::entityToDTO).toList();
+    }
+
+    public List<PostDTO> findByAuthorId(long authorId) {
+        return this.postRepository.findAllByUserId(authorId).stream()
+                .map(PostMapper::entityToDTO)
+                .toList();
+    }
+
+    public Optional<PostDTO> findById(long id) {
+        return this.postRepository.findById(id).map(PostMapper::entityToDTO).or(Optional::empty);
     }
 
     @RabbitListener(queues = "${rabbitmq.queue.postQueue:addPostQueue}")
