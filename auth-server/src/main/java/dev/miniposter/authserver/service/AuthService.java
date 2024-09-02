@@ -14,6 +14,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @Log
 @RequiredArgsConstructor
@@ -38,7 +40,12 @@ public class AuthService {
         return new SignInJWTResponse(jwt);
     }
 
-    public SignInJWTResponse signIn(SignInRequest request) {
+    public SignInJWTResponse generateJWTResponse(UserDetails user) {
+        String jwt = jwtService.generateToken(user);
+        return new SignInJWTResponse(jwt);
+    }
+
+    public Optional<UserDetails> authenticateUser(SignInRequest request) {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                     request.username(),
@@ -46,10 +53,9 @@ public class AuthService {
             ));
         } catch (AuthenticationException e) {
             log.severe("Auth failed for request " + request);
-            return new SignInJWTResponse("");
+            return Optional.empty();
         }
         UserDetails user = userService.loadUserByUsername(request.username());
-        String jwt = jwtService.generateToken(user);
-        return new SignInJWTResponse(jwt);
+        return Optional.of(user);
     }
 }
