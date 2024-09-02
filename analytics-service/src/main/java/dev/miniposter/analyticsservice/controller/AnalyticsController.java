@@ -1,6 +1,9 @@
 package dev.miniposter.analyticsservice.controller;
 
 import dev.miniposter.analyticsservice.dto.AnalyticsRecordDTO;
+import dev.miniposter.analyticsservice.dto.BadWordsSummaryDTO;
+import dev.miniposter.analyticsservice.dto.StatisticsSummaryDTO;
+import dev.miniposter.analyticsservice.dto.UserStatisticsSummaryDTO;
 import dev.miniposter.analyticsservice.model.AnalyticsRecord;
 import dev.miniposter.analyticsservice.repository.AnalyticsRepository;
 import dev.miniposter.analyticsservice.service.AnalyticsRecordMapper;
@@ -40,13 +43,13 @@ public class AnalyticsController {
     }
 
     @GetMapping("/user/{id}")
-    ResponseEntity<Map<String, Long>> userStatistics(@PathVariable("id") long userId) {
+    ResponseEntity<UserStatisticsSummaryDTO> userStatistics(@PathVariable("id") long userId) {
         try {
             List<AnalyticsRecord> records = this.analyticsRepository.findAllByAuthorId(userId);
             Pair<Long, Long> approvedRejected = this.calculateApprovedRejected(records);
-            return ResponseEntity.ok(Map.of(
-                    "approved", approvedRejected.getFirst(),
-                    "rejected", approvedRejected.getSecond()
+            return ResponseEntity.ok(new UserStatisticsSummaryDTO(
+                    approvedRejected.getFirst(),
+                    approvedRejected.getSecond()
             ));
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -54,14 +57,14 @@ public class AnalyticsController {
     }
 
     @GetMapping("/summary")
-    ResponseEntity<Map<String, Long>> statistics() {
+    ResponseEntity<StatisticsSummaryDTO> statistics() {
         try {
             List<AnalyticsRecord> records = this.analyticsRepository.findAll();
             Pair<Long, Long> approvedRejected = this.calculateApprovedRejected(records);
-            return ResponseEntity.ok(Map.of(
-                    "total", (long) records.size(),
-                    "approved", approvedRejected.getFirst(),
-                    "rejected", approvedRejected.getSecond()
+            return ResponseEntity.ok(new StatisticsSummaryDTO(
+                    records.size(),
+                    approvedRejected.getFirst(),
+                    approvedRejected.getSecond()
             ));
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -75,10 +78,10 @@ public class AnalyticsController {
     }
 
     @GetMapping("/bad_words_summary")
-    ResponseEntity<Map<String, Long>> allBadWords() {
+    ResponseEntity<BadWordsSummaryDTO> allBadWords() {
         try {
             Map<String, Long> stats = this.analyticsRepository.countBadWords();
-            return ResponseEntity.ok(stats);
+            return ResponseEntity.ok(new BadWordsSummaryDTO(stats));
         } catch (Exception e) {
             log.severe(e.getLocalizedMessage());
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
