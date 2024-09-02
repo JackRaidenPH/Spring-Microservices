@@ -24,7 +24,9 @@ public class RSAPublicKeyController {
     @GetMapping("/rsa")
     public ResponseEntity<String> getRSAPublicKey() {
         try {
-            PublicKey publicKey = rsaService.getPublicKey();
+            PublicKey publicKey = rsaService
+                    .getPublicKey()
+                    .orElseThrow(() -> new IllegalStateException("Public key does not exist!"));
             String encoded = Base64.getEncoder().encodeToString(publicKey.getEncoded());
             return ResponseEntity.ok().contentLength(encoded.length()).body(encoded);
         } catch (Exception e) {
