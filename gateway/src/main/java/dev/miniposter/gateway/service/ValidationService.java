@@ -18,27 +18,8 @@ import java.util.Base64;
 @Service
 public class ValidationService {
 
-//    @Autowired
-//    private AuthRESTService authRESTService;
-
     @Autowired
     private KeyFactory rsaKeyFactory;
-
-//    public Claims tryExtract(String token) {
-//        if (token == null || token.isBlank()) {
-//            log.severe("Provided token is null or empty!");
-//            return null;
-//        }
-//
-//        String stringKey = this.authRESTService.getPublicRSAKey();
-//        PublicKey key = this.constructPublicKey(stringKey);
-//
-//        if (key == null) {
-//            return null;
-//        }
-//
-//        return this.extractAllClaims(key, token);
-//    }
 
     public Claims extractAllClaims(PublicKey key, String token) {
         try {
