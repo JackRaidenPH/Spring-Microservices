@@ -34,9 +34,7 @@ public class UserService implements UserDetailsService {
     public User getByUsername(String username) {
         return this.userRepository
                 .findByUsername(username)
-                .orElseGet(
-                        () -> this.userRepository.findByEmail(username)
-                                .orElseThrow(() -> new UsernameNotFoundException("User not found!"))
+                .orElseThrow(() -> new UsernameNotFoundException("User not found!")
                 );
     }
 
