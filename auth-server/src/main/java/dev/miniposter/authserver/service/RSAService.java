@@ -55,13 +55,12 @@ public class RSAService {
         }
     }
 
-    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
-    public boolean keyPairExists() {
-        return new File(this.publicKeyLocation).exists() && new File(this.privateKeyLocation).exists();
+    public boolean isKeyPairCorrupted() {
+        return !(new File(this.publicKeyLocation).exists() && new File(this.privateKeyLocation).exists());
     }
 
     public Optional<PublicKey> getPublicKey() {
-        if (!this.keyPairExists()) {
+        if (this.isKeyPairCorrupted()) {
             this.regenerateKeyPair();
         }
 
@@ -76,7 +75,7 @@ public class RSAService {
     }
 
     public Optional<PrivateKey> getPrivateKey() {
-        if (!this.keyPairExists()) {
+        if (this.isKeyPairCorrupted()) {
             this.regenerateKeyPair();
         }
 
