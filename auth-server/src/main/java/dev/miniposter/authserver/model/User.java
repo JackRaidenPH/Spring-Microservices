@@ -39,7 +39,7 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(this.getRole().getRoleString()));
+        return List.of(new SimpleGrantedAuthority(this.getRole().getAuthority()));
     }
 
     @Getter
@@ -47,10 +47,10 @@ public class User implements UserDetails {
         ROLE_USER("USER"),
         ROLE_ADMIN("ADMIN");
 
-        private final String roleString;
+        private final String authority;
 
-        Role(String roleString) {
-            this.roleString = roleString;
+        Role(String authority) {
+            this.authority = authority;
         }
     }
 }
