@@ -27,7 +27,7 @@ services:
       - app-network
 
   config-server:
-    image: config-server:0.0.1-SNAPSHOT
+    image: config-server-curl:latest
     hostname: config-server
     container_name: config-server
     pull_policy: never 
@@ -42,7 +42,7 @@ services:
     ports:
       - "7999:7999"
     healthcheck:
-      test: sleep 3s
+      test: curl --fail http://localhost:7999/auth-server/default || exit 1
       interval: 4s
       retries: 1
       timeout: 5s

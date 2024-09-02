@@ -1,0 +1,5 @@
+FROM openjdk:17-jdk-alpine
+ARG JAR_FILE=config-server.jar
+COPY ${JAR_FILE} config-server.jar
+RUN apk add --update curl
+ENTRYPOINT ["java","-jar","/config-server.jar"]
