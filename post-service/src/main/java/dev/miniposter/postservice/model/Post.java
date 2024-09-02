@@ -3,8 +3,6 @@ package dev.miniposter.postservice.model;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.UUID;
-
 //JPA
 @Entity
 //Lombok

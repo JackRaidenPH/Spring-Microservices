@@ -2,12 +2,13 @@ package dev.miniposter.gateway.configuration;
 
 import dev.miniposter.gateway.component.RequestAuthGatewayFilter;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.gateway.route.RouteLocator;
 import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.env.Environment;;
+import org.springframework.core.env.Environment;
+
+;
 
 @Configuration
 @RequiredArgsConstructor

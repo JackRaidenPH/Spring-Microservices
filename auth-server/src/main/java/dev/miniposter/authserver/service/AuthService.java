@@ -1,16 +1,14 @@
 package dev.miniposter.authserver.service;
 
-import dev.miniposter.authserver.dto.SignInJWTResponse;
 import dev.miniposter.authserver.dto.RegisterRequest;
+import dev.miniposter.authserver.dto.SignInJWTResponse;
 import dev.miniposter.authserver.dto.SignInRequest;
+import dev.miniposter.authserver.model.User;
 import dev.miniposter.authserver.model.User.Role;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
-import org.bouncycastle.crypto.generators.RSAKeyPairGenerator;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import dev.miniposter.authserver.model.User;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;

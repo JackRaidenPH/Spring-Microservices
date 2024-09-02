@@ -1,7 +1,6 @@
 package dev.miniposter.postservice.dto;
 
 import java.io.Serializable;
-import java.util.UUID;
 
 public record AnalyticsRecordDTO(Long authorID, boolean accepted, String reason, String optionalDetails) implements Serializable {
 

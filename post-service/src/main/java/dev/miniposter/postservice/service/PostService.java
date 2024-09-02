@@ -1,6 +1,5 @@
 package dev.miniposter.postservice.service;
 
-import dev.miniposter.postservice.configuration.RabbitMQConfiguration;
 import dev.miniposter.postservice.dto.AnalyticsRecordDTO;
 import dev.miniposter.postservice.dto.AnalyticsRecordDTO.DenyReason;
 import dev.miniposter.postservice.dto.PostDTO;
@@ -8,7 +7,6 @@ import dev.miniposter.postservice.model.Post;
 import dev.miniposter.postservice.repository.PostRepository;
 import lombok.extern.java.Log;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
