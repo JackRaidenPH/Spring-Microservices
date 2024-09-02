@@ -45,7 +45,7 @@ public class AuthService {
         return new SignInJWTResponse(jwt);
     }
 
-    public Optional<UserDetails> authenticateUser(SignInRequest request) {
+    public UserDetails authenticateUser(SignInRequest request) {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                     request.username(),
@@ -53,9 +53,8 @@ public class AuthService {
             ));
         } catch (AuthenticationException e) {
             log.severe("Auth failed for request " + request);
-            return Optional.empty();
+            throw e;
         }
-        UserDetails user = userService.loadUserByUsername(request.username());
-        return Optional.of(user);
+        return userService.loadUserByUsername(request.username());
     }
 }

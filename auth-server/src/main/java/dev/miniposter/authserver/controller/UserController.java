@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -53,15 +54,15 @@ public class UserController {
                 return ResponseEntity.badRequest().build();
             }
 
-            Optional<UserDetails> userDetails = this.authService.authenticateUser(request);
-
-            if (userDetails.isEmpty()) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-            }
-
-            SignInJWTResponse created = authService.generateJWTResponse(userDetails.get());
+            UserDetails userDetails = this.authService.authenticateUser(request);
+            SignInJWTResponse created = authService.generateJWTResponse(userDetails);
             return created.token().isBlank() ? ResponseEntity.status(HttpStatus.UNAUTHORIZED).build() : ResponseEntity.ok(created);
-        } catch (RuntimeException e) {
+
+        }
+        catch (AuthenticationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getLocalizedMessage(), e);
+        }
+        catch (RuntimeException e) {
             log.warning(e.getLocalizedMessage());
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getLocalizedMessage(), e);
         }
