@@ -57,7 +57,6 @@ public class UserController {
             UserDetails userDetails = this.authService.authenticateUser(request);
             SignInJWTResponse created = authService.generateJWTResponse(userDetails);
             return created.token().isBlank() ? ResponseEntity.status(HttpStatus.UNAUTHORIZED).build() : ResponseEntity.ok(created);
-
         }
         catch (AuthenticationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getLocalizedMessage(), e);

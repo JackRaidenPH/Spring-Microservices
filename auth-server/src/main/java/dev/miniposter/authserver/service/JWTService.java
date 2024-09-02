@@ -45,7 +45,12 @@ public class JWTService {
                 .subject(userDetails.getUsername())
                 .issuedAt(Date.from(Instant.now()))
                 .expiration(Date.from(Instant.now().plus(7, ChronoUnit.DAYS)))
-                .signWith(rsaService.getPrivateKey(), SIG.RS512)
+                .signWith(
+                        rsaService
+                                .getPrivateKey()
+                                .orElseThrow(() -> new IllegalStateException("Couldn't get the private RSA key!")),
+                        SIG.RS512
+                )
                 .compact();
     }
 
@@ -59,7 +64,11 @@ public class JWTService {
 
     private Claims extractAllClaims(String token) {
         return Jwts.parser()
-                .verifyWith(rsaService.getPublicKey())
+                .verifyWith(
+                        rsaService
+                                .getPublicKey()
+                                .orElseThrow(() -> new IllegalStateException("Couldn't get the public RSA key!"))
+                )
                 .build()
                 .parseSignedClaims(token)
                 .getPayload();

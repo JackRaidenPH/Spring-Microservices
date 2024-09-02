@@ -19,6 +19,7 @@ import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
+import java.util.Optional;
 
 @Service
 @Log
@@ -59,7 +60,7 @@ public class RSAService {
         return new File(this.publicKeyLocation).exists() && new File(this.privateKeyLocation).exists();
     }
 
-    public PublicKey getPublicKey() {
+    public Optional<PublicKey> getPublicKey() {
         if (!this.keyPairExists()) {
             this.regenerateKeyPair();
         }
@@ -67,14 +68,14 @@ public class RSAService {
         try {
             byte[] keyBytes = Files.readAllBytes(Path.of(this.publicKeyLocation));
             KeySpec keySpec = new X509EncodedKeySpec(keyBytes);
-            return this.rsaKeyFactory.generatePublic(keySpec);
+            return Optional.of(this.rsaKeyFactory.generatePublic(keySpec));
         } catch (IOException | InvalidKeySpecException e) {
             log.severe("Exception throw on an attempt to read a private RSA key: " + e.getLocalizedMessage());
-            return null;
+            return Optional.empty();
         }
     }
 
-    public PrivateKey getPrivateKey() {
+    public Optional<PrivateKey> getPrivateKey() {
         if (!this.keyPairExists()) {
             this.regenerateKeyPair();
         }
@@ -82,10 +83,10 @@ public class RSAService {
         try {
             byte[] keyBytes = Files.readAllBytes(Path.of(this.privateKeyLocation));
             KeySpec keySpec = new PKCS8EncodedKeySpec(keyBytes);
-            return this.rsaKeyFactory.generatePrivate(keySpec);
+            return Optional.of(this.rsaKeyFactory.generatePrivate(keySpec));
         } catch (IOException | InvalidKeySpecException e) {
             log.severe("Exception throw on an attempt to read a private RSA key: " + e.getLocalizedMessage());
-            return null;
+            return Optional.empty();
         }
     }
 
