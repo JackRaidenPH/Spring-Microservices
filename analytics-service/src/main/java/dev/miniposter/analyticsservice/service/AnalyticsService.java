@@ -29,7 +29,11 @@ public class AnalyticsService {
         try {
             AnalyticsRecord saved = this.analyticsRepository.save(AnalyticsRecordMapper.dtoToEntity(message));
             log.info("Saved new analytics record with ID: " + saved.getId());
-        } catch (Exception e) {
+        }
+        catch (IllegalArgumentException illegalArgumentException) {
+            log.warning("Got analytics record in RabbitMQ query, but it was null!");
+        }
+        catch (Exception e) {
             log.severe(e.getLocalizedMessage());
         }
     }
