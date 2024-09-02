@@ -37,6 +37,12 @@ public class RSAService {
     private String privateKeyLocation;
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
+    /*
+    The method call is ignored, because we are not interested in whether files exists or not.
+    This method is a forced call to regenerate the RSA keypair.
+    If the files do not exist yet - they will be created and newly created RSA pair will be written there.
+    If the files do exist already - their contents will be overwritten.
+    */
     public void regenerateKeyPair() {
         KeyPair pair = this.rsaKeyPairBuilder.build();
         File privateFile = new File(this.privateKeyLocation);
