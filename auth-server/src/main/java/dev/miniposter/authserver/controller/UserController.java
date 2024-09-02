@@ -34,7 +34,7 @@ public class UserController {
         }
     }
 
-    @GetMapping("/login")
+    @PostMapping("/login")
     private ResponseEntity<SignInJWTResponse> login(@RequestBody SignInRequest request) {
         try {
             SignInJWTResponse created = authService.signIn(request);
