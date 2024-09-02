@@ -3,6 +3,8 @@ package dev.miniposter.authserver.service;
 import dev.miniposter.authserver.dto.RegisterRequest;
 import dev.miniposter.authserver.dto.SignInJWTResponse;
 import dev.miniposter.authserver.dto.SignInRequest;
+import dev.miniposter.authserver.exception.EmailAlreadyExistsException;
+import dev.miniposter.authserver.exception.UsernameAlreadyExistsException;
 import dev.miniposter.authserver.model.User;
 import dev.miniposter.authserver.model.User.Role;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +28,9 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
 
-    public SignInJWTResponse signUp(RegisterRequest request) {
+    public SignInJWTResponse signUp(RegisterRequest request) throws
+            UsernameAlreadyExistsException,
+            EmailAlreadyExistsException {
         User user = User.builder()
                 .username(request.username())
                 .email(request.email())

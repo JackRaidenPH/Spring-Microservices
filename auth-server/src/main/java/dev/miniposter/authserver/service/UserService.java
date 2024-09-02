@@ -1,5 +1,7 @@
 package dev.miniposter.authserver.service;
 
+import dev.miniposter.authserver.exception.EmailAlreadyExistsException;
+import dev.miniposter.authserver.exception.UsernameAlreadyExistsException;
 import dev.miniposter.authserver.model.User;
 import dev.miniposter.authserver.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,13 +20,13 @@ public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
 
-    public void create(User user) {
+    public void create(User user) throws UsernameAlreadyExistsException, EmailAlreadyExistsException {
         if (userRepository.existsByUsername(user.getUsername())) {
-            throw new RuntimeException("Username already exists!");
+            throw new UsernameAlreadyExistsException(user.getUsername());
         }
 
         if (userRepository.existsByEmail(user.getEmail())) {
-            throw new RuntimeException("Email already exists!");
+            throw new EmailAlreadyExistsException(user.getEmail());
         }
 
         this.userRepository.save(user);
