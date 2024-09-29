@@ -4,7 +4,7 @@ Config-Server -> Auth-Server <-> Gateway <-> Filter-Service <-> Analytics-Servic
 Launch\
 Config server uses curl to check reach to GitHub repository, so must be built with a Dockerfile\
 ```docker build -t config-server-curl -f ConfigServerDockerfile .```\
-The rest are built using Gradle's ```bootBuildImage``` task
+The rest are built using Gradle's ```bootBuildImage``` task\
 Launch with 
 ```
 cd .\docker\
